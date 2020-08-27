@@ -19,11 +19,11 @@ def Boolean(what, line_num):
     newtext = ""
     number = 0
     for i in separated[0]:
-        if i in ["true", "false", "none"]:
+        if i in ["True", "False", "none"]:
             newtext += i.capitalize()
         else:
             #print("else")
-            a = Aardvark.gettype(i)
+            a = Aardvark.gettype(i, line_num, dontcheck=["bool"])
             if a[0] == "string":
                 toadd = f"'{a[1]}'"
             else:
