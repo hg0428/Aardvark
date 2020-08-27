@@ -64,13 +64,17 @@ def exec_function(name, code, lang="Aardvark"):
 def parse_line(line, line_num):
     isfunction = re.fullmatch("[\t ]*([A-Za-z][a-zA-Z0-9]*[\t ]*\(.*?\)?)",
                               line)
-    ismethod = re.fullmatch("[\t ]*(.+)\.([\w][\w0-9]*[\t ]*\(.*?\))", line)
+    ismethod = re.fullmatch("[\t ]*(.+)\.([A-Za-z][a-zA-Z0-9]*[\t ]*\(.*?\))", line)
+    defvar = re.fullmatch("[\t ]*[A-Za-z][a-zA-Z0-9]*[\t ]*=[\t ]*(.+?)[\t ]*",line)
     if isfunction:
         #print("PARSE FUNCTION")
         Aardvark.process_function(isfunction.groups()[0], line_num)
     elif ismethod:
         ismethod = ismethod.groups()
         Aardvark.process_method(ismethod[0], ismethod[1], line_num)
+    elif defvar:
+      defvar=defvar.groups()
+
 
 
 #output('hi'.replace('i', 'e'))
