@@ -27,7 +27,7 @@ def exit_function(name):
 @Aardvark.function("help")
 def help_function(name):  #Help function
     print(
-        "Go to: https://github.com/hg0428/Aardvark and read README.md.\nLater on you will be able to use https://aardvark.readthedocs.io but we are still working on that site."
+        "Go to: https://aardvark.readthedocs.io we are still working on the site."
     )
 
 

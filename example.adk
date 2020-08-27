@@ -1,0 +1,15 @@
+#include abc from tools
+#max-memory 50
+
+if "hi"=="bye" {
+  output("true")
+}
+for each "a" in "aa" {
+  output("a")
+}
+none none
+true, false, boolean expr boolean
+"hi", 'string2' strings
+89945, 48.405 number
+['hi', 9, 'item'] list
+{'dict':'this is a dict'} dictionary
