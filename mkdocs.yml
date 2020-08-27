@@ -1,0 +1,5 @@
+mkdocs.yml
+docs/
+    index.md
+    about.md
+    license.md
