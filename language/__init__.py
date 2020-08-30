@@ -107,13 +107,11 @@ class Lang:
 
     def gettokens(self, text, sep=[""],
                   returnremoved=False):  #separates tokens
-#Anyone know how to fix it, or a better way to make it?
-#This function is supposed to split text at seps when outside a string, list, dict, function ,and other stuff like that
-#We need to start over on this function
+        #Anyone know how to fix it, or a better way to make it?
+        #This function is supposed to split text at seps when outside a string, list, dict, function ,and other stuff like that
+        #Do you know how we can recreate the function to do the same thing, this method of doing it does not work.
         if text == '':
             return text
-        if sep == [""]:
-            sep = [self.token_seperator]
         addit = [True]
         candd = True
         separated = []
@@ -179,9 +177,9 @@ class Lang:
             #print("MULTIPLE ADDED TOGETHER")
             try:
                 final = self.gettype(
-                    spilttered[0][0], line_num, dontcheck=["added"])[1]
-            except:
-                return
+                    spilttered[0][0], line_num, dontcheck=["added"])[1] #calles gettype which calls gettokens
+            except: #it will break if it does
+                return None #
             try:
                 removed = spilttered[1]
                 num = 0

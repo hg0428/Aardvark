@@ -12,7 +12,7 @@ To run files all you need to do is run ``#include file-to-run`` this imports all
 
 Math And String Concantonations:
 ########
-Math works as usual (Multiplication: *, Division: /, Addition: +, Subtraction: -), and ``ints`` are defined as ``number()``. String concantonations is done by simply putting an addition sign between strings: ``'string '+'concantonation!'``
+Math works as usual (Multiplication: *, Division: /, Addition: +, Subtraction: -), and ``ints`` are defined as ``number()``. String concantonations is done by simply putting an addition sign between strings: ``'string '+'concantonation!'``, ``'string ' + 'concantonation!'`` is also valid.
 
 If Statements:
 ########
@@ -22,7 +22,7 @@ If statments work like most other langages; it runs a check to see if the condit
         result
     }
 
-Recieving User input:
+Recieving User Input:
 ########
 To get user input use the ``input()`` function. Syntax: ``input(prompt)``. This can be assigned to a variable like so: ``myVar = input(prompt)``, as it is assigned to a variable you can check if (in this case) ``myVar`` is equal to something code-block:
 ::
@@ -30,3 +30,7 @@ To get user input use the ``input()`` function. Syntax: ``input(prompt)``. This 
     if myVar == 'hello!' {
         do something
     }
+
+Functions:
+########
+Functions are defined by the ``funct`` keyword.
