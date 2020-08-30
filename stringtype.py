@@ -1,8 +1,9 @@
 from Aardvark import *
 
 
-@Aardvark.type("string")
+@Aardvark.type("string") #This is how you make a type
 def string_type(what, line_num):
+    what=str(what)
     instring = False
     instringcount = 0
     count = 0
@@ -21,7 +22,7 @@ def string_type(what, line_num):
         if what[0] != what[-1]:
             language.error("TypeError", line_num, what,
                            "Strings must start and end with the same ' or \"")
-        return True, eval(what)
+        return True, eval(what.replace("\n","\\n"))
 
     else:
         return False, what
@@ -30,3 +31,11 @@ def string_type(what, line_num):
 @Aardvark.method("string", "replace")
 def string_replace(name, string, old, new):
     return string.replace(old, new)
+
+@Aardvark.method("string", "atindex") #Here is a method for string types
+def string_atindex(name, string, index):
+  return string[index]
+
+def string_length_attribue(string):
+  return len(string)
+Aardvark.addattribute("string", "length", string_length_attribue) #Here is an attribute for string types

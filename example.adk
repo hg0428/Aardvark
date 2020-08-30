@@ -1,4 +1,4 @@
-#include abc from tools
+#include server
 #max-memory 50
 
 if "hi"=="bye" {
@@ -13,3 +13,4 @@ true, false, boolean expr boolean
 89945, 48.405 number
 ['hi', 9, 'item'] list
 {'dict':'this is a dict'} dictionary
+/This is a comment, it can be anywhere\

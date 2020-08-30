@@ -17,6 +17,7 @@ def hascommonelement(l1, l2):
     for i in l1:
         if i in l2 and i not in common:
             common.append(i)
+    #print(l1, l2, common)
     return common
 
 
@@ -44,6 +45,7 @@ class Variable:
         self.gt = gt
         self.type = gt[0]
         self.value = gt[1]
+        self.attributes = {}
 
     def __repr__(self):
         return self.gt
@@ -54,8 +56,15 @@ class Lang:
         self.functions = {}
         self.types = {}
         self.variables = {}
-        self.classes = {}
         self.methods = {}
+        self.attributes = {}
+        self.userfunctions = {}
+
+    def adduserfunction(self, name, code, args, line_num):
+        self.userfunctions[name] = [code, args, line_num]
+
+    def addattribute(self, fortype, name, calc):
+        self.attributes[fortype].append([name, calc])
 
     def function(self, name):  #Lang.function() wrapper
         def decorator_repeat(func):
@@ -74,6 +83,7 @@ class Lang:
     def type(self, name):  #Lang.type() wrapper
         def decorator_repeat(func):
             self.types[name] = func
+            self.attributes[name] = []
 
             def wrapper_repeat(*args, **kwargs):
                 value = func(*args, *kwargs)
@@ -101,70 +111,93 @@ class Lang:
             return text
         if sep == "":
             sep = [self.token_seperator]
-        instring = False
-        inpar = False
-        num = 0
-        t = ""
-        s = ""
-        tokens = []
+        addit = True
+        separated = []
         removed = []
-        for i in str(text):
+        s = ""
+        for i in text:
             s += i
-            t += i
-            common = hascommonelement(s, sep)
-            if i in "\"'":
-                s = ""
-                if instring == False:
-                    instring = i
+            if i in "\"'[](){}":
+                if addit:
+                    addit = False
                 else:
-                    instring = False
-            if i in "()":
-                s = ""
-                if instring == False:
-                    inpar = i
-                else:
-                    inpar = False
-            elif len(common) > 0 and instring == False and inpar == False:
-                tokens.append(t[:-len(common[0])])
-                removed.append(common[0])
-                s = ""
-                t = ""
-            elif i == " " and instring == False and inpar == False:
-                i = ""
-                t = t[:-1]
-            elif len(s) == len(max(sep, key=len)):
-                s = ""
-            num += 1
-        if instring == False:
-            tokens.append(t)
-        if returnremoved == True:
-            return tokens, removed
-        return tokens
+                    addit = True
+            if i == " " and addit == True:
+                s = s[:-1]
+            for i in sep:
+                if i in s and addit == True:
+                    index = s.find(i)
+                    index
+                    removed.append(i)
+                    separated.append(s[:index])
+                    s = ""
+                    #print(f"{i} is at index {index} in {s}", )
+        separated.append(s)
+        if returnremoved:
+            return separated, removed
+        else:
+            return separated
 
     def gettype(self, what, line_num, dontcheck=[]):
-        what = str(what)
+        #print(f"Getting the type of: {what}")
         for t in self.types:  #Checks data types
             if t not in dontcheck:
-                check = self.types[t](what, line_num)
+                try:
+                    check = self.types[t](what, line_num)
+                except:
+                    check = (False, what)
+                #print("Check:", t, check)
                 if check[0] == True:
                     return t, check[1]
-        isfunction = re.fullmatch("[\t ]*([A-Za-z][a-zA-Z0-9]*[\t ]*\(.*?\)?)",
-                                  what)
+        what=str(what)
         ismethod = re.fullmatch("[\t ]*(.+)\.([\w][\w0-9]*[\t ]*\(.*?\)?)",
                                 what)
-        if isfunction:
-            result = self.process_function(isfunction.groups()[0], line_num)
+        isattribute = re.fullmatch(
+            "[\t ]*(.+?)\.([A-Za-z\.][a-zA-Z0-9\.]*)[\t ]*", what)
+        spilttered = self.gettokens(what, sep=["+"])
+        #print("CHECKING")
+        if isattribute:
+            #print("ATTRIBUTE")
+            isattribute = isattribute.groups()
+            calledon = self.gettype(isattribute[0], line_num)
+            attributes = self.attributes[calledon[0]]
+            for i in attributes:
+                if i[0] == isattribute[1]:
+                    return self.gettype(i[1](calledon[1]), line_num)
+        #print("WHAT:",what)
+        if re.fullmatch("[\t ]*([A-Za-z][a-zA-Z0-9]*[\t ]*\(.*\))[\t ]*",
+                        what):
+            #print(f"GETTYPE is sending {what} to process_function")
+            result = self.process_function(what, line_num)
             if type(result) == str:
                 result = f'"{result}"'
             return self.gettype(result, line_num)
-        if ismethod:
+        elif ismethod:
+            #print("METHOD")
             ismethod = ismethod.groups()
             result = self.process_method(ismethod[0], ismethod[1], line_num)
             if type(result) == str:
                 result = f'"{result}"'
             return self.gettype(result, line_num)
+        elif what in self.variables:
+            #print("VARIABLE")
+            return self.variables[what].gt
+        elif len(spilttered) > 0 and "added" not in dontcheck:
+            #print("MULTIPLE ADDED TOGETHER")
+            final = self.gettype(
+                spilttered[0], line_num, dontcheck=["added"])[1]
+            try:
+                for i in spilttered[1:]:
+                    final += self.gettype(i, line_num, dontcheck=["added"])[1]
+            except:
+                error("TypeError", line_num, what,
+                      "Those items can not be added together.")
+            if type(final) == str:
+                final = f"'{final}'"
+            return self.gettype(final, line_num, dontcheck=["added"])
 
     def process_function(self, function, line_num):
+        #print("Function is:",function)
         if not function.endswith(")"):
             error("SyntaxError", line_num, function,
                   "Function calls must start with '(' and end with ')'.")
@@ -180,7 +213,7 @@ class Lang:
             arguments = []
             for arg in args:
                 arguments.append(self.gettype(arg, line_num)[1])
-            return function(code[0], *arguments), "BYE"
+            return function(code[0], *arguments)
 
     def process_method(self, calledon, method, line_num):
         calledon = self.gettype(calledon, line_num)

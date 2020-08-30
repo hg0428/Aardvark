@@ -1,0 +1,27 @@
+#include anr
+#include db
+
+output('hello world')
+a = 0
+while a < 10 {
+    output(a)
+    a = a + 1
+}
+
+b = input('> ')
+if b == 'plas' {
+    output('Welcome ' + b)
+}
+
+funct myFunc(f) {
+    output(f)
+}
+myFunc()
+
+this = input('> ')
+
+funct addDB(what) {
+    add('key', what)
+}
+
+addDB(this)

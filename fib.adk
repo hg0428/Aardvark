@@ -1,0 +1,19 @@
+#include anr
+
+funct fibo(n) {
+    output("welcome")
+    if n < 0 {
+        output('invalid input')
+    }
+    if n == 1 {
+        output(0)
+    }
+    if n == 2 {
+        output(1)
+    }
+    if n > 2 {
+        output(fibo(n - 1) + fibo(n - 2))
+    }
+}
+
+fibo(30)
