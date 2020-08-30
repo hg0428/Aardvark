@@ -57,7 +57,7 @@ def dissable_function(name,
 @Aardvark.function('clear')
 def clear(name):
     os.system('clear')
-    print("Aardvark Version 0.2.0 BETA\nUse the help function for help.\nCopyright 2020 PlasDev, hg0428, ZDev1\n")
+    print("Aardvark Version 0.2.5 BETA\nUse the help function for help.\nCopyright 2020 PlasDev, hg0428, ZDev1\n")
 
 
 @Aardvark.function("open")
@@ -149,24 +149,21 @@ def whileblock(code, line_num):
 
 
 def newfunction(code, line_num):
-    print("newfunct")
     code = code.split("\n")[:-1]
     isfunctiondefinition = re.fullmatch(
         "[\t ]*funct [\t ]*(.+)\((.*)\)[\t ]*{[\t ]*", code[0]).groups()
     argslist = Aardvark.gettokens(isfunctiondefinition[1], sep=",")
     Aardvark.adduserfunction(isfunctiondefinition[0], code[1:], argslist,
                              line_num)
-    print("Name", isfunctiondefinition[0])
-
     @Aardvark.function(isfunctiondefinition[0])
     def userfunction(name, *args):
-        print("running",name)
         data = Aardvark.userfunctions[name]
         number = 0
         for i in args:
+          if type(i)==str:
             i = i.replace("'", "\\'")
-            parse_line(f"{data[1][number]} = '{i}'", data[-1])
-            number += 1
+          parse_line(f"{data[1][number]} = '{i}'", data[-1])
+          number += 1
         for i in data[0]:
             a = parse_line(i, data[-1])
             if a != None:
@@ -233,12 +230,12 @@ def parse_line(line, line_num, enable_return=False):
     ismaxmem = re.fullmatch("#max-memory[\t ]* (.+)", line)
     isreturn = re.fullmatch("[\t ]*return[\t ]* (.+?)[\t ]*", line)
     #print(instuff)
-    if isforin or isfunctiondefinition or iswhile or isif and len(instuff) >= 1:
+    if len(instuff) >= 1 and (isforin or isfunctiondefinition or iswhile or isif):
         instuff.append(["nothing", "nothing"])
     if re.fullmatch("[\t ]*}[\t ]*", line):
         what = instuff[-1]
         instuff = instuff[:-1]
-        print(instuff)
+        #print(instuff)
         if what[0]!="nothing":
           what[0](what[1], line_num)
     for i in instuff:
@@ -283,7 +280,7 @@ def parse_line(line, line_num, enable_return=False):
 #output('hi'.replace('i', 'e'))
 global line_num
 line_num = 0
-print("Aardvark Version 0.2.5 BETA\nUse the help function for help.\nCopyright 2020 PlasDev, hg0428, ZDev1\n")
+print("Aardvark Version 0.2.5 BETA\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n")
 while True:
     #print(memory_profiler.memory_usage(), globalmaxmemory)
     if memory_profiler.memory_usage()[0] > globalmaxmemory:

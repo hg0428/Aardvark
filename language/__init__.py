@@ -111,28 +111,34 @@ class Lang:
             return text
         if sep == "":
             sep = [self.token_seperator]
-        addit = True
+        addit = [True]
+        candd = True
         separated = []
         removed = []
         s = ""
         for i in text:
             s += i
+            addit.append(candd)
+            print(addit, candd)
             if i in "\"'[](){}":
-                if addit:
-                    addit = False
+                #print(i)
+                if candd == True:
+                    candd = False
                 else:
-                    addit = True
-            if i == " " and addit == True:
+                    candd = True
+            if i == " " and candd == True:
                 s = s[:-1]
             for i in sep:
                 if i in s and addit == True:
+                    #print("SEPAR", addit)
                     index = s.find(i)
-                    index
-                    removed.append(i)
-                    separated.append(s[:index])
-                    s = ""
-                    #print(f"{i} is at index {index} in {s}", )
+                    if addit[index] == True:
+                        removed.append(i)
+                        separated.append(s[:index])
+                        s = ""
+                        #print(f"{i} is at index {index} in {s}", )
         separated.append(s)
+        #print("GETTOKENS",text, separated, sep)
         if returnremoved:
             return separated, removed
         else:
@@ -149,12 +155,13 @@ class Lang:
                 #print("Check:", t, check)
                 if check[0] == True:
                     return t, check[1]
-        what=str(what)
+        what = str(what)
         ismethod = re.fullmatch("[\t ]*(.+)\.([\w][\w0-9]*[\t ]*\(.*?\)?)",
                                 what)
         isattribute = re.fullmatch(
             "[\t ]*(.+?)\.([A-Za-z\.][a-zA-Z0-9\.]*)[\t ]*", what)
-        spilttered = self.gettokens(what, sep=["+"])
+        spilttered = self.gettokens(
+            what, sep=["+", "-", "*", "/"], returnremoved=True)
         #print("CHECKING")
         if isattribute:
             #print("ATTRIBUTE")
@@ -165,7 +172,28 @@ class Lang:
                 if i[0] == isattribute[1]:
                     return self.gettype(i[1](calledon[1]), line_num)
         #print("WHAT:",what)
-        if re.fullmatch("[\t ]*([A-Za-z][a-zA-Z0-9]*[\t ]*\(.*\))[\t ]*",
+        elif len(spilttered) > 0 and "added" not in dontcheck:
+            #print("MULTIPLE ADDED TOGETHER")
+            try:
+                final = self.gettype(
+                    spilttered[0][0], line_num, dontcheck=["added"])[1]
+            except:
+                return
+            try:
+                removed = spilttered[1]
+                num = 0
+                for i in spilttered[0][1:]:
+                    exec(
+                        f"final {removed[num]}= self.gettype(i, line_num, dontcheck=[\"added\"])[1]"
+                    )
+                    num += 1
+            except:
+                error("TypeError", line_num, what,
+                      "Those items can not be added together.")
+            if type(final) == str:
+                final = f"'{final}'"
+            return self.gettype(final, line_num, dontcheck=["added"])
+        if re.fullmatch("[\t ]*([A-Za-z][a-zA-Z0-9]*[\t ]*\(.*?\))[\t ]*",
                         what):
             #print(f"GETTYPE is sending {what} to process_function")
             result = self.process_function(what, line_num)
@@ -182,22 +210,9 @@ class Lang:
         elif what in self.variables:
             #print("VARIABLE")
             return self.variables[what].gt
-        elif len(spilttered) > 0 and "added" not in dontcheck:
-            #print("MULTIPLE ADDED TOGETHER")
-            final = self.gettype(
-                spilttered[0], line_num, dontcheck=["added"])[1]
-            try:
-                for i in spilttered[1:]:
-                    final += self.gettype(i, line_num, dontcheck=["added"])[1]
-            except:
-                error("TypeError", line_num, what,
-                      "Those items can not be added together.")
-            if type(final) == str:
-                final = f"'{final}'"
-            return self.gettype(final, line_num, dontcheck=["added"])
 
     def process_function(self, function, line_num):
-        #print("Function is:",function)
+        print("Function is:", function)
         if not function.endswith(")"):
             error("SyntaxError", line_num, function,
                   "Function calls must start with '(' and end with ')'.")

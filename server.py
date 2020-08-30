@@ -17,7 +17,7 @@ def run_server(name, ip='0.0.0.0', port=8080, debug=False):# Runs the server, ap
 
 
 @Aardvark.function('render_file')
-def render_file(name, src, slug): #Reder_template
+def render_file(name, src, slug): #Render_template
     @app.route(f'/{slug}')
     def html():
         return flask.render_template_string(open(src).read())

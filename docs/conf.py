@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Aardvark'
-copyright = '2020, Hudson Gouge, PlasDev'
-author = 'Hudson Gouge, PlasDev'
+copyright = '2020, Hudson Gouge, PlasDev, ZDev1'
+author = 'Hudson Gouge, PlasDev, ZDev1'
 
 # The full version, including alpha/beta/rc tags
 release = '2020'

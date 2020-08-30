@@ -2,17 +2,20 @@
 
 funct fibo(n) {
     output("welcome")
-    if n < 0 {
+    if number(n) < 0 {
         output('invalid input')
     }
-    if n == 1 {
+    if number(n) == 1 {
         output(0)
     }
-    if n == 2 {
+    if number(n) == 2 {
         output(1)
     }
-    if n > 2 {
-        output(fibo(n - 1) + fibo(n - 2))
+    if number(n) > 2 {
+        n=number(n)
+        x=fibo(n-2)
+        a=fibo(n-1) 
+        output(a+x)
     }
 }
 
