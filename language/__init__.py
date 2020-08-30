@@ -107,9 +107,12 @@ class Lang:
 
     def gettokens(self, text, sep=[""],
                   returnremoved=False):  #separates tokens
+#Anyone know how to fix it, or a better way to make it?
+#This function is supposed to split text at seps when outside a string, list, dict, function ,and other stuff like that
+#We need to start over on this function
         if text == '':
             return text
-        if sep == "":
+        if sep == [""]:
             sep = [self.token_seperator]
         addit = [True]
         candd = True
@@ -212,7 +215,7 @@ class Lang:
             return self.variables[what].gt
 
     def process_function(self, function, line_num):
-        print("Function is:", function)
+        #print("Function is:", function)
         if not function.endswith(")"):
             error("SyntaxError", line_num, function,
                   "Function calls must start with '(' and end with ')'.")

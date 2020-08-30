@@ -3,12 +3,12 @@ from Aardvark import *
 @Aardvark.type("bool")
 def Boolean(what, line_num):
     what=str(what)
-    print("Boolean",what)
+    #print("Boolean",what)
     separated = Aardvark.gettokens(
         what,
         sep=["==", ">", "<", "!=", "<=", ">=", " and ", " or ", " not "],
         returnremoved=True)
-    print(separated)
+    #print(separated)
     isboolean = False
     for i in [
             "==", ">", "<", "!=", "<=", ">=", " and ", " or ", "True", "False",
