@@ -33,4 +33,20 @@ To get user input use the ``input()`` function. Syntax: ``input(prompt)``. This 
 
 Functions:
 ########
-Functions are defined by the ``funct`` keyword.
+Functions are defined by the ``funct`` keyword. Syntax:
+::
+    funct myFunction(arg1, arg2) {
+        do something
+    }
+Functions defined by the user run like any other function.
+
+Statements
+#########
+All statments start with ``#``, there are currently 2 statments, ``#include`` and ``#max-memory``.
+``#include`` includes the specified module. Syntax:
+::
+    #include server
+
+``#max-memory`` sets the program's maximum allowed memory. Syntax:
+::
+    #max-memory 50 /Sets the maximum memory to 50mb\
