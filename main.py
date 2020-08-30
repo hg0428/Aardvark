@@ -269,7 +269,7 @@ def parse_line(line, line_num, enable_return=False):
         #print("IT IS AN #include")
         inculde_statement(isinclude.groups()[0], line_num)
     elif isfunctiondefinition:
-        print("defining function")
+        #print("defining function")
         instuff.append([newfunction, line + "\n"])
     elif ismaxmem:
         globalmaxmemory = float(ismaxmem.groups()[0])

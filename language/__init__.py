@@ -119,7 +119,7 @@ class Lang:
         for i in text:
             s += i
             addit.append(candd)
-            print(addit, candd)
+            #print(addit, candd)
             if i in "\"'[](){}":
                 #print(i)
                 if candd == True:
