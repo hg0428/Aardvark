@@ -15,11 +15,6 @@ def add(name, key, value, file='db.json'):
 def loadData(name, file="db.json"):
   print(open(file).read())
 
-#@Aardvark.function('getKey')
-#def get(name, key, data=open('db.json').read()):
-#  for key, value in data.items():
-#    print(value)
-
 '''
 data['key'] = 'value'
 json_data = json.dumps(data)
