@@ -1,22 +1,21 @@
 #include anr
 
-funct fibo(n) {
-    output("welcome")
+funct Fib(n) {
     if number(n) < 0 {
         output('invalid input')
     }
     if number(n) == 1 {
-        output(0)
+        return 0
     }
     if number(n) == 2 {
-        output(1)
+        return 1
     }
     if number(n) > 2 {
         n=number(n)
-        x=fibo(n-2)
-        a=fibo(n-1) 
-        output(a+x)
+        x=Fib(n-2)
+        a=Fib(n-1) 
+        return a+x
     }
 }
 
-fibo(30)
+output(Fib(input("Enter a number to do Fib on: ")))

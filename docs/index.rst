@@ -14,6 +14,19 @@ Math And String Concantonations:
 ########
 Math works as usual (Multiplication: *, Division: /, Addition: +, Subtraction: -), and ``ints`` are defined as ``number()``. String concantonations is done by simply putting an addition sign between strings: ``'string '+'concantonation!'``, ``'string ' + 'concantonation!'`` is also valid.
 
+Booleans
+########
+Well booleans in Aardvark are ``True`` and ``False``
+(DON'T THINK THAT THEY ARE THE SAME IN PYTHON, WE MADE IT BY OURSELF!)
+::
+    myBoolean = True
+    if myBoolean == True {
+      output('Nice!')
+    }
+    if myBoolean == False {
+      output('Sad...')
+    }
+
 If Statements:
 ########
 If statments work like most other langages; it runs a check to see if the conditions described in the first line (the one with the initial ``if``) are met. If the conditions are true it will execute the given code inside the brackets. Syntax:
@@ -26,9 +39,21 @@ Recieving User Input:
 ########
 To get user input use the ``input()`` function. Syntax: ``input(prompt)``. This can be assigned to a variable like so: ``myVar = input(prompt)``, as it is assigned to a variable you can check if (in this case) ``myVar`` is equal to something code-block:
 ::
+    myVar = input('How are you? ')
+    if myVar == 'good' {
+        output('Nice!')
+    }
 
-    if myVar == 'hello!' {
-        do something
+While Statements:
+########
+While statements are so useful in all the languages, and also in Aardvark!
+
+::
+
+    n = 0
+    while n < 10 {
+      output(n)
+      n += 1
     }
 
 Functions:

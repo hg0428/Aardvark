@@ -57,7 +57,7 @@ def dissable_function(name,
 @Aardvark.function('clear')
 def clear(name):
     os.system('clear')
-    print("Aardvark Version 0.2.5 BETA\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n")
+    print("Aardvark Version 0.6.2\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n")
 
 
 @Aardvark.function("open")
@@ -144,6 +144,7 @@ def whileblock(code, line_num):
     code = code.split("\n")[:-1]
     iswhile = re.fullmatch("[\t ]*while [\t ]*(.+?)[\t ]*{[\t ]*",
                            code[0]).groups()[0]
+    #print(iswhile)
     while Aardvark.gettype(iswhile, line_num)[1] == True:
         for i in code[1:]:
             #print(i)
@@ -252,6 +253,7 @@ def parse_line(line, line_num, enable_return=False):
         defvar = defvar.groups()
         #print("Defvar is:", defvar)
         gt = Aardvark.gettype(defvar[1], line_num)
+        #print(gt)
         Aardvark.variables[defvar[0]] = language.Variable(defvar[0], gt)
         for i in Aardvark.attributes[gt[0]]:
             Aardvark.variables[defvar[0] + "." + i[0]] = language.Variable(
@@ -282,7 +284,7 @@ def parse_line(line, line_num, enable_return=False):
 #output('hi'.replace('i', 'e'))
 global line_num
 line_num = 0
-print("Aardvark Version 0.2.5 BETA\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n")
+print("Aardvark Version 0.6.2\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n")
 while True:
     #print(memory_profiler.memory_usage(), globalmaxmemory)
     if memory_profiler.memory_usage()[0] > globalmaxmemory:

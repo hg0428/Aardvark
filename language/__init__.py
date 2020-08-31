@@ -105,17 +105,18 @@ class Lang:
 
         return decorator_repeat
 
-    def gettokens(self,text, sep=[","], returnremoved=False):
+    def gettokens(self, text, sep=[","], returnremoved=False):
         removed = []
         t = ""
         wait = 0
         toreturn = []
-        waitfori=0
+        waitfori = 0
         itemsdict = {"'": "'", '"': '"', "(": ")"}
         for i in range(0, len(text)):
             if wait == 0:
                 t += text[i]
-            if text[i] not in list(itemsdict.keys()) and text[i] in ''.join(sep) and waitfori==0:
+            if text[i] not in list(itemsdict.keys()) and text[i] in ''.join(
+                    sep) and waitfori == 0:
                 new = ""
                 number = 0
                 for item in text[i:]:
@@ -128,21 +129,24 @@ class Lang:
                         wait = number + 1
                         break
                     number += 1
-            if text[i] in list(itemsdict.keys()) and waitfori==0 and wait==0:
+            if text[i] in list(itemsdict.keys()) and wait == 0 and waitfori==0:
                 number = 0
-                for item in text[i+1:]:
-                    if item==itemsdict[text[i]]:
-                        waitfori=number
+                for item in text[i + 1:]:
+                    if item == itemsdict[text[i]]:
+                        waitfori = number+2
                         break
                     number += 1
+            if text[i]==" " and waitfori==0 and wait==0:
+              t=t[:-1]
             if wait != 0:
                 wait -= 1
-            if waitfori!=0:
-              waitfori-=1
+            if waitfori != 0:
+                waitfori -= 1
         toreturn.append(t)
-        if returnremoved:
+        if returnremoved==True:
             return toreturn, removed
         return toreturn
+
 
     def gettype(self, what, line_num, dontcheck=[]):
         #print(f"Getting the type of: {what}")
@@ -176,22 +180,27 @@ class Lang:
             #print("MULTIPLE ADDED TOGETHER")
             try:
                 final = self.gettype(
-                    spilttered[0][0], line_num, dontcheck=["added"])[1] #calles gettype which calls gettokens
-            except: #it will break if it does
-                return None #
-            try:
-                removed = spilttered[1]
-                num = 0
-                for i in spilttered[0][1:]:
-                    exec(
-                        f"final {removed[num]}= self.gettype(i, line_num, dontcheck=[\"added\"])[1]"
-                    )
-                    num += 1
-            except:
-                error("TypeError", line_num, what,
-                      "Those items can not be added together.")
+                    spilttered[0][0], line_num, dontcheck=[
+                        "added"
+                    ])[1]  #calles gettype which calls gettokens
+            except:  #it will break if it does
+                return None  #
+            #print("SPL", spilttered)
+            #try:
+            removed = spilttered[1]
+            num = 0
+            for i in spilttered[0][1:]:
+                data=self.gettype(i, line_num, dontcheck=['added'])
+                if data[0]=='string':
+                    data=(data[0],f'"{data[1]}"')
+                final=eval(f"final {removed[num]} {data[1]}")
+                num += 1
+            #except:
+             #   error("TypeError", line_num, what,
+              #        "Those items can not be added together.")
             if type(final) == str:
                 final = f"'{final}'"
+            #print("FINAL",final)
             return self.gettype(final, line_num, dontcheck=["added"])
         if re.fullmatch("[\t ]*([A-Za-z][a-zA-Z0-9]*[\t ]*\(.*?\))[\t ]*",
                         what):
@@ -210,6 +219,7 @@ class Lang:
         elif what in self.variables:
             #print("VARIABLE")
             return self.variables[what].gt
+        return "none", "none"
 
     def process_function(self, function, line_num):
         #print("Function is:", function)
@@ -224,9 +234,10 @@ class Lang:
             except:
                 error("NameError", line_num, '('.join(code) + ")",
                       f"Function '{code[0]}' does not exist.")
-            print(code)
+            #print(code)
             args = self.gettokens(code[1], [","])
-            print(args)
+            if args==['']:
+              args=[]
             arguments = []
             for arg in args:
                 arguments.append(self.gettype(arg, line_num)[1])
