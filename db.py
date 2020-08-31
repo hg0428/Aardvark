@@ -8,7 +8,7 @@ def add(name, key, value, file='db.json'):
     data[f'{key}'] = f'{value}'
     json_data = json.dumps(data)
     with open(file, 'a') as database:
-      database.write(json_data + ',')
+      database.write('\n' + json_data)
     print(f'Data stored!\nData: {json_data}')
 
 @Aardvark.function('loadData')

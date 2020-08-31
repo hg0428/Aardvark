@@ -57,7 +57,7 @@ def dissable_function(name,
 @Aardvark.function('clear')
 def clear(name):
     os.system('clear')
-    print("Aardvark Version 0.2.5 BETA\nUse the help function for help.\nCopyright 2020 PlasDev, hg0428, ZDev1\n")
+    print("Aardvark Version 0.2.5 BETA\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n")
 
 
 @Aardvark.function("open")
@@ -93,7 +93,7 @@ def exit_function(name):
 @Aardvark.function("help")
 def help_function(name):  #Help function
     print(
-        "Go to: https://repl.it/@Programit/Aardvark-website#script.js we are still working on the site."
+        "Goto: https://aardvark-website.programit.repl.co"
     )
 
 
@@ -127,6 +127,8 @@ def exec_function(name, code, lang="Aardvark"):
             parse_line(i, line_num)
     elif lang == "python":
         exec(code)
+    else:
+      print('We do not support this language!')
 
 
 def ifblock(code, line_num):

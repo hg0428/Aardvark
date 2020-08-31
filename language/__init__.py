@@ -105,45 +105,44 @@ class Lang:
 
         return decorator_repeat
 
-    def gettokens(self, text, sep=[""],
-                  returnremoved=False):  #separates tokens
-        #Anyone know how to fix it, or a better way to make it?
-        #This function is supposed to split text at seps when outside a string, list, dict, function ,and other stuff like that
-        #Do you know how we can recreate the function to do the same thing, this method of doing it does not work.
-        if text == '':
-            return text
-        addit = [True]
-        candd = True
-        separated = []
+    def gettokens(self,text, sep=[","], returnremoved=False):
         removed = []
-        s = ""
-        for i in text:
-            s += i
-            addit.append(candd)
-            #print(addit, candd)
-            if i in "\"'[](){}":
-                #print(i)
-                if candd == True:
-                    candd = False
-                else:
-                    candd = True
-            if i == " " and candd == True:
-                s = s[:-1]
-            for i in sep:
-                if i in s and addit == True:
-                    #print("SEPAR", addit)
-                    index = s.find(i)
-                    if addit[index] == True:
-                        removed.append(i)
-                        separated.append(s[:index])
-                        s = ""
-                        #print(f"{i} is at index {index} in {s}", )
-        separated.append(s)
-        #print("GETTOKENS",text, separated, sep)
+        t = ""
+        wait = 0
+        toreturn = []
+        waitfori=0
+        itemsdict = {"'": "'", '"': '"', "(": ")"}
+        for i in range(0, len(text)):
+            if wait == 0:
+                t += text[i]
+            if text[i] not in list(itemsdict.keys()) and text[i] in ''.join(sep) and waitfori==0:
+                new = ""
+                number = 0
+                for item in text[i:]:
+                    new += item
+                    if new in sep:
+                        removed.append(new)
+                        t = t[:-1]
+                        toreturn.append(t)
+                        t = ""
+                        wait = number + 1
+                        break
+                    number += 1
+            if text[i] in list(itemsdict.keys()) and waitfori==0 and wait==0:
+                number = 0
+                for item in text[i+1:]:
+                    if item==itemsdict[text[i]]:
+                        waitfori=number
+                        break
+                    number += 1
+            if wait != 0:
+                wait -= 1
+            if waitfori!=0:
+              waitfori-=1
+        toreturn.append(t)
         if returnremoved:
-            return separated, removed
-        else:
-            return separated
+            return toreturn, removed
+        return toreturn
 
     def gettype(self, what, line_num, dontcheck=[]):
         #print(f"Getting the type of: {what}")
@@ -225,7 +224,9 @@ class Lang:
             except:
                 error("NameError", line_num, '('.join(code) + ")",
                       f"Function '{code[0]}' does not exist.")
+            print(code)
             args = self.gettokens(code[1], [","])
+            print(args)
             arguments = []
             for arg in args:
                 arguments.append(self.gettype(arg, line_num)[1])
