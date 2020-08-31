@@ -13,7 +13,7 @@ import memory_profiler
 import File
 import dictionaries
 from tqdm import tqdm
-import requests
+import urllib.request as urllib
 end = ""
 '''
 #include visual
@@ -23,24 +23,22 @@ show()
 '''
 
 def ape_statement(file, line_num):
-    try:
+    #try:
         chunk_size = 1024
 
-        url = f"https://aardvark-website.programit.repl.co/docs/latest/to_download.html{file}"
-
-        req = requests.get(url, stream = True)
-
-        total_size = int(req.headers['content-length'])
-
-        with open(file, "wb") as file:
-            for data in tqdm(iterable=req.iter_content(chunk_size=chunk_size), total = total_size/chunk_size, unit='KB'):
-                file.write(data)
-
+        url = f"https://aardvark-website.programit.repl.co/scripts/{file}" #No, look below
+        try:
+          f=urllib.urlopen(url+".adk")
+          ext="adk"
+        except:
+          f=urllib.urlopen(url+".py")
+          ext="py"
+        f=str(f.read())[2:-1].replace("\\n","\n").replace("\\r","\r")
+        open(f'{file}.{ext}', "w+").write()
         print(f"Installation of '{file}' completed")
-    except:
-        error("InstallationError", line_num, file,
-              f"File {file} could not be found.")
-
+    #except:
+     #  error("InstallationError", line_num, file,
+      #      f"File {file} could not be found.")
 
 def inculde_statement(inclusion, line_num):
     global end
@@ -344,3 +342,11 @@ while True:
     #          "Unknown SyntaxError, you may report this a bug.")
     except KeyboardInterrupt:
         error("KeyboardInterrupt", line_num, a, "")
+
+#############################################
+#############################################
+#############################################
+### © Copyright by hg0428, PlasDev, ZDev1 ###
+#############################################
+#############################################
+#############################################
