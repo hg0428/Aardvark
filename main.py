@@ -26,7 +26,7 @@ def ape_statement(file, line_num):
     try:
         chunk_size = 1024
 
-        url = f"https://Aardvark.programit.repl.co/{file}"
+        url = f"https://aardvark-website.programit.repl.co/docs/latest/to_download.html{file}"
 
         req = requests.get(url, stream = True)
 
