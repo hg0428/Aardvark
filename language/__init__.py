@@ -160,7 +160,7 @@ class Lang:
                 if check[0] == True:
                     return t, check[1]
         what = str(what)
-        ismethod = re.fullmatch("[\t ]*(.+)\.([\w][\w0-9]*[\t ]*\(.*?\)?)",
+        ismethod = re.fullmatch("[\t ]*(.+)\.([\w][\w0-9]*[\t ]*\(.*?\))",
                                 what)
         isattribute = re.fullmatch(
             "[\t ]*(.+?)\.([A-Za-z\.][a-zA-Z0-9\.]*)[\t ]*", what)
@@ -202,7 +202,7 @@ class Lang:
                 final = f"'{final}'"
             #print("FINAL",final)
             return self.gettype(final, line_num, dontcheck=["added"])
-        if re.fullmatch("[\t ]*([A-Za-z][a-zA-Z0-9]*[\t ]*\(.*?\))[\t ]*",
+        if re.fullmatch("[\t ]*([A-Za-z][a-zA-Z0-9]*[\t ]*\(.*?\)?)[\t ]*",
                         what):
             #print(f"GETTYPE is sending {what} to process_function")
             result = self.process_function(what, line_num)
@@ -236,12 +236,16 @@ class Lang:
                       f"Function '{code[0]}' does not exist.")
             #print(code)
             args = self.gettokens(code[1], [","])
-            if args==['']:
-              args=[]
             arguments = []
             for arg in args:
+                if arg=='':
+                  continue
                 arguments.append(self.gettype(arg, line_num)[1])
-            return function(code[0], *arguments)
+            #print(arguments)
+            try:
+                return function(code[0], *arguments)
+            except:
+                error("TypeError", line_num, '('.join(code) + ")", "Incorrect number of args.")
 
     def process_method(self, calledon, method, line_num):
         calledon = self.gettype(calledon, line_num)
@@ -255,10 +259,16 @@ class Lang:
                                        code[0].replace(" ", "").replace(
                                            "\t", ""))][1]
             except:
-                error("NameError", line_num, '('.join(code) + ")",
+                error("AttributeError", line_num, '('.join(code) + ")",
                       f"'{calledon[0]}' object has no attribute '{code[0]}'.")
             args = self.gettokens(code[1], [","])
             arguments = []
             for arg in args:
+                if arg=='':
+                    continue
                 arguments.append(self.gettype(arg, line_num)[1])
-            return method(code[0], calledon[1], *arguments)
+            #print(arguments)
+            try:
+              return method(code[0], calledon[1], *arguments)
+            except:
+                error("TypeError", line_num, '('.join(code) + ")", "Incorrect number of args.")

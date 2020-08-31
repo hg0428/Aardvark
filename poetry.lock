@@ -443,7 +443,7 @@ dev = ["pytest", "pytest-timeout", "coverage", "tox", "sphinx", "pallets-sphinx-
 watchdog = ["watchdog"]
 
 [metadata]
-content-hash = "2173c1d50b127232000aaacc1de9e232ca1c24be1749320f6737e7ecacd98885"
+content-hash = "58f9a20109be5e7f3ed42f5a46ce3a600881e1822ed5ad172fa5f77d4c499c52"
 python-versions = "^3.8"
 
 [metadata.files]

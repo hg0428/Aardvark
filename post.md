@@ -1,5 +1,5 @@
 ## A quick note
-This competition had been very challenging and difficult, we have not met our goals or created the langauge we imagined, but we have managed to work together and submit this project.
+This competition had been very challenging and difficult, 
 Thank you repl.it for this challenge, it has got me (and I think my team) into develpoing this amazing project.
 # [Aardvark](https://aardvark-website.programit.repl.co/)
 

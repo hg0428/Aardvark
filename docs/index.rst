@@ -12,12 +12,11 @@ To run files all you need to do is run ``#include file-to-run`` this imports all
 
 Math And String Concantonations:
 ########
-Math works as usual (Multiplication: *, Division: /, Addition: +, Subtraction: -), and ``ints`` are defined as ``number()``. String concantonations is done by simply putting an addition sign between strings: ``'string '+'concantonation!'``, ``'string ' + 'concantonation!'`` is also valid.
+Math works as usual (Multiplication: *, Division: /, Addition: +, Subtraction: -), and ``ints()`` are defined as ``number(perameter)``. String concantonations is done by simply putting an addition sign between strings: ``'string '+'concantonation!'``, ``'string ' + 'concantonation!'`` is also valid.
 
 Booleans
 ########
-Well booleans in Aardvark are ``True`` and ``False``
-(DON'T THINK THAT THEY ARE THE SAME IN PYTHON, WE MADE IT BY OURSELF!)
+Booleans in Aardvark are ``True`` and ``False``, they can both be assigned to a variable.
 ::
     myBoolean = True
     if myBoolean == True {
@@ -44,9 +43,9 @@ To get user input use the ``input()`` function. Syntax: ``input(prompt)``. This 
         output('Nice!')
     }
 
-While Statements:
+While Loops:
 ########
-While statements are so useful in all the languages, and also in Aardvark!
+While statements are so useful in all the languages, and also in Aardvark! While is used to check if something is true, and if it is true it will continue to execute the code within the while block until it is false (this can also work if something is always true).
 
 ::
 
@@ -60,18 +59,21 @@ Functions:
 ########
 Functions are defined by the ``funct`` keyword. Syntax:
 ::
-    funct myFunction(arg1, arg2) {
+    funct myFunction(args) {
         do something
     }
-Functions defined by the user run like any other function.
+Function can be called by typing the function's name with parenthese at the end (if the function has parameters include the parameter values too!) like so: ``myFunction()``, or ``myFunction(args)`` if the function was defined with arguments. Function arguments are seperated by commas (``,``). Functions defined by the user run like any other function.
 
-Statements
+'Statements':
 #########
 All statments start with ``#``, there are currently 2 statments, ``#include`` and ``#max-memory``.
 ``#include`` includes the specified module. Syntax:
 ::
-    #include server
+    #include file
 
 ``#max-memory`` sets the program's maximum allowed memory. Syntax:
 ::
-    #max-memory 50 /Sets the maximum memory to 50mb\
+    #max-memory number / For instance Sets the maximum memory to 50mb \
+
+File Handling:
+#########

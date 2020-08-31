@@ -27,10 +27,11 @@ def getdictitem(name, dictionary, item):
     except:
         error("ValueError", 0, f"{dictionary}.{name}({item})",
               f"{item} is not in {dictionary}")
-@Aardvark.method("dictionary", "newitem")
-def newitem(name, dictionary, key, value):
-  return dictionary.update({key:value})
 
+
+@Aardvark.method("dictionary", "newitem")
+def additem(name, dictionary, key, value):
+    return dictionary.update({key: value})
 
 
 def dict_length_attribute(thelist):

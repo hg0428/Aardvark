@@ -12,6 +12,7 @@ pyqt5 = "^5.15.0"
 pydictionary = "^2.0.1"
 textblob = "^0.15.3"
 gensim = "^3.8.3"
+tqdm = "^4.48.2"
 
 [tool.poetry.dev-dependencies]
 

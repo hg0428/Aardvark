@@ -5,8 +5,12 @@ import re
 
 @Aardvark.type("file")
 def File(what, line_num):
+    isfile=re.fullmatch("<?_io.TextIOWrapper ?name='(.*?)' ?mode='(.*?)'.+?", str(what))
     if type(what) == _io.TextIOWrapper:
         return True, what
+    if isfile:
+        isfile=isfile.groups()
+        return True, open(isfile[0], isfile[1])
     else:
         return False, what
 

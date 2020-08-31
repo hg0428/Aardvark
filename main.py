@@ -12,14 +12,34 @@ from pathlib import Path
 import memory_profiler
 import File
 import dictionaries
+from tqdm import tqdm
+import requests
 end = ""
-
 '''
 #include visual
 visual("hello world", "700x700+10+20")
 label('hello', 'black', 'white', 80, 150)
 show()
 '''
+
+def ape_statement(file, line_num):
+    try:
+        chunk_size = 1024
+
+        url = f"https://Aardvark.programit.repl.co/{file}"
+
+        req = requests.get(url, stream = True)
+
+        total_size = int(req.headers['content-length'])
+
+        with open(file, "wb") as file:
+            for data in tqdm(iterable=req.iter_content(chunk_size=chunk_size), total = total_size/chunk_size, unit='KB'):
+                file.write(data)
+
+        print(f"Installation of '{file}' completed")
+    except:
+        error("InstallationError", line_num, file,
+              f"File {file} could not be found.")
 
 
 def inculde_statement(inclusion, line_num):
@@ -43,7 +63,6 @@ def inculde_statement(inclusion, line_num):
                       f"Module {inclusion} could not be found.")
 
 
-
 @Aardvark.function(
     "dissable")  # Functions start with this, dissable is the functions name
 def dissable_function(name,
@@ -57,7 +76,9 @@ def dissable_function(name,
 @Aardvark.function('clear')
 def clear(name):
     os.system('clear')
-    print("Aardvark Version 0.6.2\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n")
+    print(
+        "Aardvark Version 0.7.4 BETA\nUse the help function for help.\n© Made 2020 PlasDev, hg0428, ZDev1\n"
+    )
 
 
 @Aardvark.function("open")
@@ -65,11 +86,16 @@ def open_function(name, file, mode="r"):
     return open(file, mode)
 
 
-@Aardvark.function("mem")  #mem is this ones name
-def memory(name, file):  #get the size of a file
+@Aardvark.function("currentMemUsage")
+def currentMemUsage(name):
+    return memory_profiler.memory_usage()[0]
+
+
+@Aardvark.function("file_size")  #mem is this ones name
+def file_size(name, file):  #get the size of a file
     a = Path(file).stat().st_size
     print(f'{a} Bytes')
-    return None
+    return a
 
 
 @Aardvark.function("output")  #
@@ -92,9 +118,7 @@ def exit_function(name):
 
 @Aardvark.function("help")
 def help_function(name):  #Help function
-    print(
-        "Goto: https://aardvark-website.programit.repl.co"
-    )
+    print("Goto: https://aardvark-website.programit.repl.co")
 
 
 @Aardvark.function("string")
@@ -110,6 +134,11 @@ def number_function(name, obj=""):
 @Aardvark.function("list")
 def list_function(name, obj=""):
     return list(obj)
+
+
+@Aardvark.function("type")
+def type_function(name, obj):
+    return f'"{type(obj)}"'
 
 
 @Aardvark.function("boolean")
@@ -128,7 +157,7 @@ def exec_function(name, code, lang="Aardvark"):
     elif lang == "python":
         exec(code)
     else:
-      print('We do not support this language!')
+        print('We do not support this language!')
 
 
 def ifblock(code, line_num):
@@ -158,15 +187,16 @@ def newfunction(code, line_num):
     argslist = Aardvark.gettokens(isfunctiondefinition[1], sep=",")
     Aardvark.adduserfunction(isfunctiondefinition[0], code[1:], argslist,
                              line_num)
+
     @Aardvark.function(isfunctiondefinition[0])
     def userfunction(name, *args):
         data = Aardvark.userfunctions[name]
         number = 0
         for i in args:
-          if type(i)==str:
-            i = i.replace("'", "\\'")
-          parse_line(f"{data[1][number]} = '{i}'", data[-1])
-          number += 1
+            if type(i) == str:
+                i = i.replace("'", "\\'")
+            parse_line(f"{data[1][number]} = '{i}'", data[-1])
+            number += 1
         for i in data[0]:
             a = parse_line(i, data[-1])
             if a != None:
@@ -206,17 +236,15 @@ def remove_comments(code):
     return newstring
 
 
-
-
-
 globalmaxmemory = 99999999999999999999999999999999999999999999999999999999999
 
 
 def parse_line(line, line_num, enable_return=False):
     global instuff, globalmaxmemory
+    line=remove_comments(line)
     if memory_profiler.memory_usage()[0] > globalmaxmemory:
         error("MemoryError", line_num, line,
-                       "The program went above its maximum memory.")
+              "The program went above its maximum memory.")
     isfunction = re.fullmatch("[\t ]*([A-Za-z_][a-zA-Z0-9_]*[\t ]*\(.*?\)?)",
                               line)
     ismethod = re.fullmatch(
@@ -227,26 +255,37 @@ def parse_line(line, line_num, enable_return=False):
     iswhile = re.fullmatch("[\t ]*while [\t ]*(.+?)[\t ]*{[\t ]*", line)
     isforin = re.fullmatch("[\t ]*for [\t ]*(.+) [\t ]*in [\t ]*(.+)[\t ]*{",
                            line)
+    #####
+    #####
     isinclude = re.fullmatch("[\t ]*#include [\t ]*(.+)", line)
+    isape = re.fullmatch("[\t ]*#ape [\t ]*(.+)", line)
+    #####
+    #####
     isfunctiondefinition = re.fullmatch(
         "[\t ]*funct [\t ]*.+\(.*\)[\t ]*{[\t ]*", line)
     ismaxmem = re.fullmatch("#max-memory[\t ]* (.+)", line)
     isreturn = re.fullmatch("[\t ]*return[\t ]* (.+?)[\t ]*", line)
     #print(instuff)
-    if len(instuff) >= 1 and (isforin or isfunctiondefinition or iswhile or isif):
+    if len(instuff) >= 1 and (isforin or isfunctiondefinition or iswhile
+                              or isif):
         instuff.append(["nothing", "nothing"])
     if re.fullmatch("[\t ]*}[\t ]*", line):
         what = instuff[-1]
         instuff = instuff[:-1]
         #print(instuff)
-        if what[0]!="nothing":
-          what[0](what[1], line_num)
+        if what[0] != "nothing":
+            what[0](what[1], line_num)
+        return
     for i in instuff:
         i[1] += line + "\n"
     if len(instuff) > 0:
         return
-    if isfunction:
-        #print("PARSE FUNCTION")
+    elif ismethod:
+        #print("method")
+        ismethod = ismethod.groups()
+        Aardvark.process_method(ismethod[0], ismethod[1], line_num)
+    elif isfunction:
+        #print("function")
         Aardvark.process_function(isfunction.groups()[0], line_num)
     elif defvar:
 
@@ -259,10 +298,6 @@ def parse_line(line, line_num, enable_return=False):
             Aardvark.variables[defvar[0] + "." + i[0]] = language.Variable(
                 defvar[0] + "." + i[0], Aardvark.gettype(
                     i[1](gt[1]), line_num))
-    elif ismethod:
-        #print("method")
-        ismethod = ismethod.groups()
-        Aardvark.process_method(ismethod[0], ismethod[1], line_num)
     elif isif:
         instuff.append([ifblock, line + "\n"])
     elif iswhile:
@@ -272,6 +307,12 @@ def parse_line(line, line_num, enable_return=False):
     elif isinclude:
         #print("IT IS AN #include")
         inculde_statement(isinclude.groups()[0], line_num)
+    ###############
+    ###############
+    elif isape:
+        ape_statement(isape.groups()[0], line_num)
+    ###############
+    ###############
     elif isfunctiondefinition:
         #print("defining function")
         instuff.append([newfunction, line + "\n"])
@@ -279,18 +320,27 @@ def parse_line(line, line_num, enable_return=False):
         globalmaxmemory = float(ismaxmem.groups()[0])
     elif isreturn and enable_return:
         return Aardvark.gettype(isreturn.groups()[0], line_num)
+    elif re.fullmatch("[\t ]*", line):
+        pass
+    else:
+        error("SyntaxError", line_num, line, "Invalid Syntax.")
 
 
-#output('hi'.replace('i', 'e'))
 global line_num
 line_num = 0
-print("Aardvark Version 0.6.2\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n")
+print(
+    "Aardvark Version 0.7.4 BETA\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n"
+)
 while True:
-    #print(memory_profiler.memory_usage(), globalmaxmemory)
     if memory_profiler.memory_usage()[0] > globalmaxmemory:
         error("MemoryError", line_num, a,
-                       "The program went above its maximum memory.")
+              "The program exceeded its maximum memory.")
     line_num += 1
     a = remove_comments(input(">>> "))
-    parse_line(a, line_num)
-    #This will do it after every line of code.
+    try:
+        parse_line(a, line_num)
+    #except Exception:
+    #    error("SyntaxError", line_num, a,
+    #          "Unknown SyntaxError, you may report this a bug.")
+    except KeyboardInterrupt:
+        error("KeyboardInterrupt", line_num, a, "")

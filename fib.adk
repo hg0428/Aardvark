@@ -13,9 +13,10 @@ funct Fib(n) {
     if number(n) > 2 {
         n=number(n)
         x=Fib(n-2)
-        a=Fib(n-1) 
+        a=Fib(n-1)
         return a+x
     }
 }
+a = input("Enter a number to do Fib on: ")
 
-output(Fib(input("Enter a number to do Fib on: ")))
+output(Fib(a))
