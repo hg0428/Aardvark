@@ -5,3 +5,4 @@ To get started with your first output do: `output('hello world!\n')`. There you 
 
 ## Running Files
 To run files all you need to do is run `#include file-to-run` this imports all aspects of a file and runs them directly to the terminal.
+[![Run on Repl.it](https://repl.it/badge/github/hg0428/Aardvark)](https://repl.it/github/hg0428/Aardvark)
