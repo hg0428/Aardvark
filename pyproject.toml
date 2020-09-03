@@ -1,18 +1,14 @@
 [tool.poetry]
-name = "aardvark"
+name = "aardvark-beta"
 version = "0.1.0"
 description = ""
 authors = ["repl.it user <replituser@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-memory-profiler = "^0.57.0"
 flask = "^1.1.2"
-pyqt5 = "^5.15.0"
-pydictionary = "^2.0.1"
-textblob = "^0.15.3"
-gensim = "^3.8.3"
-tqdm = "^4.48.2"
+memory-profiler = "^0.57.0"
+replit = "^2.0.0"
 
 [tool.poetry.dev-dependencies]
 

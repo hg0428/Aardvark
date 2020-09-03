@@ -25,3 +25,9 @@ def render_file(name, src, slug=''): #Render_template
 @Aardvark.function('getrequest')
 def getrequest(name): #Gets flasks request
   return flask.request
+
+@Aardvark.function("errorhandler")
+def handle_error(name, error, file):
+  @app.errorhandler(error)
+  def own_404_page(error):
+    return render_file(file)

@@ -4,12 +4,15 @@ funct Fib(n) {
     if number(n) < 0 {
         output('invalid input')
     }
+
     if number(n) == 1 {
         return 0
     }
+
     if number(n) == 2 {
         return 1
     }
+
     if number(n) > 2 {
         n=number(n)
         x=Fib(n-2)
@@ -17,6 +20,5 @@ funct Fib(n) {
         return a+x
     }
 }
-a = input("Enter a number to do Fib on: ")
-
-output(Fib(a))
+a = fib(30)
+output(a)
