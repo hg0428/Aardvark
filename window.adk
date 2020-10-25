@@ -1,5 +1,0 @@
-#include visual
-
-visual("hello world", "700x700+10+20")
-label('hello', 'black', 'white', 80, 150)
-show()

@@ -4,8 +4,10 @@ import re
 
 @Aardvark.type("dictionary")
 def dictionary_type(what, line_num):
-    what = str(what)
-    isdict = re.fullmatch("\{.+\}", what)
+    if type(what)==dict:
+      return True, what
+    what=str(what)
+    isdict = re.fullmatch("\{.*\}", what)
     if not isdict:
         return False, what
     what = Aardvark.gettokens(what[1:-1], [",", ":"])
@@ -39,3 +41,7 @@ def dict_length_attribute(thelist):
 
 
 Aardvark.addattribute("dictionary", "length", dict_length_attribute)
+
+@Aardvark.function("makedict")
+def makeDict(name):
+  return {}

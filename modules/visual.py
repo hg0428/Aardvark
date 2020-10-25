@@ -28,6 +28,4 @@ def entry(name, prompt, color, back, xplace, yplace):
 def show(name):
     window.mainloop()
 
-
-#visual("hello world", "700x700+10+20")
-#label('hello', 'black', 'white', 80, 150)
+#UPDATE THIS MODULE, USE https://towardsdatascience.com/making-simple-games-in-python-f35f3ae6f31a

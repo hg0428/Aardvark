@@ -1,0 +1,8 @@
+output("start")
+#include anr
+funct foo() {
+    if 1==1 {
+      output('hi')
+    }
+}
+foo()

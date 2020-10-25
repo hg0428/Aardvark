@@ -1,0 +1,10 @@
+#include anr
+#include server
+
+
+message = input('> ')
+message_ = input('> ')
+
+render_string(message)
+render_string(message_, '9')
+run_server()

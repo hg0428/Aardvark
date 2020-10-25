@@ -28,4 +28,6 @@ def random_funct(name):
 def randint(name, a, b):
   return random.randint(a, b)
 
-
+@Aardvark.function("color_out")
+def cp(text, color="white", style=0, back=0):
+    print(gcolor(color, style, back) + text + "\x1b[0m", end="")

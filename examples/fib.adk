@@ -1,0 +1,19 @@
+#include anr
+
+funct Fib(n) {
+output(n)
+    if number(n) < 0 {
+        return 1
+    }
+    if number(n) == 1 {
+        return 2
+    }
+
+        n = number(n)
+        x = Fib(n-1)
+        a = Fib(n-2)
+        return a + x
+
+}
+a = Fib(input("enter num: "))
+output(a)

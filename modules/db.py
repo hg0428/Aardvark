@@ -20,6 +20,3 @@ def loadData(name, file="db.json"):
   data=open(file).read()
   print('Data:\n' + data)
   return data
-
-#i want the user to be able to choose if they want a different file, okay cool. so it defaults to db.json
-#Yes

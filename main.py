@@ -1,347 +1,361 @@
 import language
 import os
+import threading
 import sys
-from Aardvark import *
 import stringtype
 import list
 import boolean
 import none
 import number
 import re
-from pathlib import Path
 import memory_profiler
 import File
 import dictionaries
-from tqdm import tqdm
+import functions
 import urllib.request as urllib
+"""
+#ape Regex
+#include Regex
+funct a() {
+  if 1==1 {
+    output("yes")
+  }
+}
+"""
 end = ""
-'''
-#include visual
-visual("hello world", "700x700+10+20")
-label('hello', 'black', 'white', 80, 150)
-show()
-'''
+totry = ""
+
+
+def fix(file='main.py'):
+  f = open(file, "r").read().replace("\t", "  ")
+  f = open(file, "w").write(f)
+  print('Done!')
+
+
+#fix("language/__init__.py")
+
+
+def deleteKey(todelete, line_num):
+  gt = Aardvark.gettype(todelete, line_num)
+  del Aardvark.variables[todelete]
+  for i in Aardvark.attributes[gt[0]]:
+    del variables[todelete + "." + i[0]]
+
+
+def returnKeyword(toreturn, line_num):
+  toreturn = Aardvark.gettype(toreturn, line_num)[1]
+
+  return toreturn
+
+
+def continueKey(code, line_num):
+  thread = threading.Thread(target=parse_line, args=(code, line_num))
+  thread.daemon = True
+  thread.start()
+
+
+def maxmemory_statement(amount, line_num):
+  global globalmaxmemory
+  globalmaxmemory = amount
+
 
 def ape_statement(file, line_num):
-    #try:
-        chunk_size = 1024
+  try:
 
-        url = f"https://aardvark-website.programit.repl.co/scripts/{file}" #No, look below
-        try:
-          f=urllib.urlopen(url+".adk")
-          ext="adk"
-        except:
-          f=urllib.urlopen(url+".py")
-          ext="py"
-        f=str(f.read())[2:-1].replace("\\n","\n").replace("\\r","\r")
-        open(f'{file}.{ext}', "w+").write()
-        print(f"Installation of '{file}' completed")
-    #except:
-     #  error("InstallationError", line_num, file,
-      #      f"File {file} could not be found.")
-
-def inculde_statement(inclusion, line_num):
-    global end
-    if inclusion == 'anr':
-        end = '\n'
-        return None
-    else:
-        try:
-            file = open(inclusion + ".adk").read().split("\n")
-
-            for line in file:
-                parse_line(line, line_num)
-        except FileExistsError and FileNotFoundError:
-            try:
-                file = open(inclusion + ".py").read()
-                if "from Aardvark import *" in file and "#Aardvark.library" in file:
-                    exec(f"import {inclusion}")
-            except FileExistsError and FileNotFoundError:
-                error("ImportError", line_num, inclusion,
-                      f"Module {inclusion} could not be found.")
-
-
-@Aardvark.function(
-    "dissable")  # Functions start with this, dissable is the functions name
-def dissable_function(name,
-                      inclusion):  #Argument is inclusion, name is always given
-    global end
-    if inclusion == 'anr':
-        end = ""
-        return None
-
-
-@Aardvark.function('clear')
-def clear(name):
-    os.system('clear')
-    print(
-        "Aardvark Version 0.7.4 BETA\nUse the help function for help.\n© Made 2020 PlasDev, hg0428, ZDev1\n"
+    url = f"https://aardvark-website.programit.repl.co/scripts/{file}"
+    extensions = [".adk", ".py", "_adkmod.py"]
+    for extension in extensions:
+      try:
+        req = urllib.urlopen(url + extension)
+        ext = extension
+        break
+      except:
+        pass
+    f = str(req.read().decode('utf-8'))
+    open(f"modules/{file}{ext}", "w+").write(f)
+    cp(f"Sucessfully installed {file}", "green")
+  except:
+    error(
+        "InstallationError", line_num, f"#ape {file}",
+        f"{file} could not be installed, check the spelling and make sure its name has not changed in a recent update."
     )
 
 
-@Aardvark.function("open")
-def open_function(name, file, mode="r"):
-    return open(file, mode)
+def include_statement(inclusion, line_num):
+  global end
+  if inclusion == 'anr':
+    functions.end = '\n'
+    return None
+  else:
+    extensions = [".adk", ".py", "_adkmod.py"]
+    for ext in extensions:
+      try:
+        if ext == ".adk":
+          file = open(inclusion + ext).read().split("\n")
+          for line in file:
+            parse_line(line, line_num)
+          return
+        elif ext == ".py" or ext == "_adkmod.py":
+          a = open("modules/" + inclusion + ext)
+          sys.path.insert(1, f'modules')
+          exec(a.read(), {}, {})
+          return
 
-
-@Aardvark.function("currentMemUsage")
-def currentMemUsage(name):
-    return memory_profiler.memory_usage()[0]
-
-
-@Aardvark.function("file_size")  #mem is this ones name
-def file_size(name, file):  #get the size of a file
-    a = Path(file).stat().st_size
-    print(f'{a} Bytes')
-    return a
-
-
-@Aardvark.function("output")  #
-def output_function(name, toprint):  #Output function
-    if end == "":
-        print(toprint, end="")
-    else:
-        print(toprint)
-
-
-@Aardvark.function("input")
-def input_function(name, prompt):  #Input function
-    return input(prompt)
-
-
-@Aardvark.function("exit")
-def exit_function(name):
-    sys.exit()
-
-
-@Aardvark.function("help")
-def help_function(name):  #Help function
-    print("Goto: https://aardvark-website.programit.repl.co")
-
-
-@Aardvark.function("string")
-def string_function(name, obj=""):
-    return str(obj)
-
-
-@Aardvark.function("number")
-def number_function(name, obj=""):
-    return float(obj)
-
-
-@Aardvark.function("list")
-def list_function(name, obj=""):
-    return list(obj)
-
-
-@Aardvark.function("type")
-def type_function(name, obj):
-    return f'"{type(obj)}"'
-
-
-@Aardvark.function("boolean")
-def boolean_function(name, obj=""):
-    global line_num
-    return boolean.Boolean(obj, line_num)[1]
-
-
-@Aardvark.function("exec")
-def exec_function(name, code, lang="Aardvark"):
-    global line_num
-    lang = lang.lower()
-    if lang == "aardvark":
-        for i in code.split("\n"):
-            parse_line(i, line_num)
-    elif lang == "python":
-        exec(code)
-    else:
-        print('We do not support this language!')
+      except FileNotFoundError:
+        continue
+    error("ImportError", line_num, f"#include {inclusion}",
+          f"Module {inclusion} could not be found.")
 
 
 def ifblock(code, line_num):
-    code = code.split("\n")[:-1]
-    isif = re.fullmatch("[\t ]*if [\t ]*(.+?)[\t ]*{[\t ]*",
-                        code[0]).groups()[0]
-    if Aardvark.gettype(isif, line_num)[1] == True:
-        for i in code[1:]:
-            parse_line(i, line_num)
+  code = code.split("\n")
+  isif = regex["isif"].fullmatch(code[0]).groups()[0]
+  #print(isif, Aardvark.gettype(isif, line_num))
+  if Aardvark.gettype(isif, line_num)[1]:
+    for i in code[1:]:
+      returnvalue = parse_line(i, line_num)
+      if returnvalue != None:
+        return returnvalue
 
 
 def whileblock(code, line_num):
-    code = code.split("\n")[:-1]
-    iswhile = re.fullmatch("[\t ]*while [\t ]*(.+?)[\t ]*{[\t ]*",
-                           code[0]).groups()[0]
-    #print(iswhile)
-    while Aardvark.gettype(iswhile, line_num)[1] == True:
-        for i in code[1:]:
-            #print(i)
-            parse_line(i, line_num)
+  code = code.split("\n")[:-1]
+  while Aardvark.gettype(iswhile, line_num)[1]:
+    for i in code[1:]:
+      returnvalue = parse_line(i, line_num)
+      if returnvalue != None:
+        return returnvalue
 
 
 def newfunction(code, line_num):
-    code = code.split("\n")[:-1]
-    isfunctiondefinition = re.fullmatch(
-        "[\t ]*funct [\t ]*(.+)\((.*)\)[\t ]*{[\t ]*", code[0]).groups()
-    argslist = Aardvark.gettokens(isfunctiondefinition[1], sep=",")
-    Aardvark.adduserfunction(isfunctiondefinition[0], code[1:], argslist,
-                             line_num)
+  code = code.split("\n")
+  isfunctiondefinition = regex["isfunctiondefinition"].fullmatch(
+      code[0]).groups()
+  argslist = Aardvark.gettokens(isfunctiondefinition[1], sep=",")
+  Aardvark.adduserfunction(isfunctiondefinition[0], code[1:], argslist,
+                           line_num)
 
-    @Aardvark.function(isfunctiondefinition[0])
-    def userfunction(name, *args):
-        data = Aardvark.userfunctions[name]
-        number = 0
-        for i in args:
-            if type(i) == str:
-                i = i.replace("'", "\\'")
-            parse_line(f"{data[1][number]} = '{i}'", data[-1])
-            number += 1
-        for i in data[0]:
-            a = parse_line(i, data[-1])
-            if a != None:
-                return a
+  @Aardvark.function(isfunctiondefinition[0])
+  def userfunction(name, *args):
+    data = Aardvark.userfunctions[name]
+    number = 0
+    for i in args:
+      if type(i) == str:
+        i = i.replace("'", "\\'")
+      makevar((data[1][number], i))
+      #parse_line(f"{data[1][number]} = '{i}'", data[-1])
+      number += 1
+    keywords["isreturn"] = returnKeyword
+    for i in data[0]:
+      keywords["isreturn"] = returnKeyword
+      returnvalue = parse_line(i, data[-1])
+      if returnvalue != None:
+
+        del keywords["isreturn"]
+        return returnvalue
 
 
 def forinblock(code, line_num):
-    code = code.split("\n")[:-1]
-    isforin = re.fullmatch("[\t ]*for [\t ]*(.+) [\t ]*in [\t ]*(.+)[\t ]*{",
-                           code[0]).groups()
-    for i in Aardvark.gettype(isforin[1], line_num)[1]:
-        parse_line(f"{isforin[0]} = {i}", line_num)
-        for line in code[1:]:
-            parse_line(line, line_num)
+  code = code.split("\n")[:-1]
+  isforin = regex["isforin"].fullmatch(code[0]).groups()
+  for i in Aardvark.gettype(isforin[1], line_num)[1]:
+    parse_line(f"{isforin[0]} = {i}", line_num)
+    for line in code[1:]:
+      returnvalue = parse_line(line, line_num)
+      if returnvalue != None:
+        return returnvalue
 
 
+def foreachblock(code, line_num):
+  code = code.split("\n")[:-1]
+  isforeach = regex["isforeach"].fullmatch(code[0]).groups()
+  a = Aardvark.gettype(isforeach[1], line_num)[1].count(
+      Aardvark.gettype(isforeach[0], line_num)[1])
+
+  for i in range(a):
+    for line in code[1:]:
+      returnvalue = parse_line(line, line_num)
+      if returnvalue != None:
+        return returnvalue
+
+
+def tryexceptblock(code, line_num):
+  global totry
+  code = code.split("\n")[:-1]
+  blocks["iscatch"] = catchblock
+  totry = code[1:]
+
+
+def catchblock(code, line_num):
+  global totry
+  del blocks["iscatch"]
+  code = code.split("\n")
+
+  todo = regex["iscatch"].fullmatch(code[0]).groups()[0]
+  try:
+
+    for i in totry:
+
+      parse_line(i, line_num)
+  except AardvarkError as e:
+    makevar([todo, f"'{e.error}'"])
+    for i in code[1:-1]:
+      parse_line(i, line_num)
+
+
+from Aardvark import *
+Aardvark.things = {
+    "isif": ifblock,
+    "iswhile": whileblock,
+    "isforeach": foreachblock,
+    "isforin": forinblock,
+    "isfunctiondefinition": newfunction,
+    "isinclude": include_statement,
+    "isape": ape_statement,
+    "ismaxmem": maxmemory_statement,
+    "iscontinue": continueKey,
+    "isdelete": deleteKey,
+    "istryexcept": tryexceptblock
+}
+setupadk()
+from Aardvark import *
 instuff = []
 
 
 def remove_comments(code):
-    instring = False
-    incomment = False
-    newstring = ""
-    for i in code:
-        if i in "\"'" and incomment == False:  #fixed
-            if i == instring:
-                instring = False
-            else:
-                instring = i
-        if i == "/" and incomment == False and instring == False:
-            incomment = True
-        if i == "\\" and incomment == True and instring == False:
-            incomment = False
-            i = ""
-        if not incomment:
-            newstring += i
-    return newstring
+  instring = ""
+  comment = ""
+  incomment = False
+  newstring = ""
+  for i in code:
+    if i in "\"'" and not incomment:
+      if i in instring:
+        instring = instring[:-1]
+      else:
+        instring += i
+    if i == "/" and not incomment and instring == "":
+      incomment = True
+      comment = ""
+    if i == "\\" and incomment and instring == "":
+      incomment = False
+      i = ""
+      comment = ""
+    if not incomment:
+      newstring += i
+    if incomment:
+      comment += i
+  return newstring + comment
 
 
-globalmaxmemory = 99999999999999999999999999999999999999999999999999999999999
+globalmaxmemory = 1000
 
 
-def parse_line(line, line_num, enable_return=False):
-    global instuff, globalmaxmemory
-    line=remove_comments(line)
-    if memory_profiler.memory_usage()[0] > globalmaxmemory:
-        error("MemoryError", line_num, line,
-              "The program went above its maximum memory.")
-    isfunction = re.fullmatch("[\t ]*([A-Za-z_][a-zA-Z0-9_]*[\t ]*\(.*?\)?)",
-                              line)
-    ismethod = re.fullmatch(
-        "[\t ]*(.+)\.([A-Za-z_][a-zA-Z0-9_]*[\t ]*\(.*?\))", line)
-    defvar = re.fullmatch(
-        "[\t ]*([A-Za-z_][a-zA-Z0-9_]*)[\t ]*=[\t ]*(.+?)[\t ]*", line)
-    isif = re.fullmatch("[\t ]*if [\t ]*(.+?)[\t ]*{[\t ]*", line)
-    iswhile = re.fullmatch("[\t ]*while [\t ]*(.+?)[\t ]*{[\t ]*", line)
-    isforin = re.fullmatch("[\t ]*for [\t ]*(.+) [\t ]*in [\t ]*(.+)[\t ]*{",
-                           line)
-    #####
-    #####
-    isinclude = re.fullmatch("[\t ]*#include [\t ]*(.+)", line)
-    isape = re.fullmatch("[\t ]*#ape [\t ]*(.+)", line)
-    #####
-    #####
-    isfunctiondefinition = re.fullmatch(
-        "[\t ]*funct [\t ]*.+\(.*\)[\t ]*{[\t ]*", line)
-    ismaxmem = re.fullmatch("#max-memory[\t ]* (.+)", line)
-    isreturn = re.fullmatch("[\t ]*return[\t ]* (.+?)[\t ]*", line)
-    #print(instuff)
-    if len(instuff) >= 1 and (isforin or isfunctiondefinition or iswhile
-                              or isif):
-        instuff.append(["nothing", "nothing"])
-    if re.fullmatch("[\t ]*}[\t ]*", line):
-        what = instuff[-1]
-        instuff = instuff[:-1]
-        #print(instuff)
-        if what[0] != "nothing":
-            what[0](what[1], line_num)
-        return
+def parse_line(line, line_num):
+  done = False
+  global instuff, globalmaxmemory
+  if memory_profiler.memory_usage()[0] > globalmaxmemory:
+    error("MemoryError", line_num, line,
+          "The program went above its maximum memory.")
+##################################################
+  for block in blocks:
+    regualrexp = regex[block].fullmatch(line)
+    if regualrexp:
+      instuff.append([blocks[block], ""])
+  for i in Aardvark.gettokens(line, ["}"])[:-1]:
+    what = instuff[-1]
+    instuff = instuff[:-1]
+    if len(instuff)==0:
+      return what[0](what[1], line_num)
     for i in instuff:
-        i[1] += line + "\n"
-    if len(instuff) > 0:
-        return
-    elif ismethod:
-        #print("method")
-        ismethod = ismethod.groups()
-        Aardvark.process_method(ismethod[0], ismethod[1], line_num)
-    elif isfunction:
-        #print("function")
-        Aardvark.process_function(isfunction.groups()[0], line_num)
-    elif defvar:
-
-        defvar = defvar.groups()
-        #print("Defvar is:", defvar)
-        gt = Aardvark.gettype(defvar[1], line_num)
-        #print(gt)
-        Aardvark.variables[defvar[0]] = language.Variable(defvar[0], gt)
-        for i in Aardvark.attributes[gt[0]]:
-            Aardvark.variables[defvar[0] + "." + i[0]] = language.Variable(
-                defvar[0] + "." + i[0], Aardvark.gettype(
-                    i[1](gt[1]), line_num))
-    elif isif:
-        instuff.append([ifblock, line + "\n"])
-    elif iswhile:
-        instuff.append([whileblock, line + "\n"])
-    elif isforin:
-        instuff.append([forinblock, line + "\n"])
-    elif isinclude:
-        #print("IT IS AN #include")
-        inculde_statement(isinclude.groups()[0], line_num)
-    ###############
-    ###############
-    elif isape:
-        ape_statement(isape.groups()[0], line_num)
-    ###############
-    ###############
-    elif isfunctiondefinition:
-        #print("defining function")
-        instuff.append([newfunction, line + "\n"])
-    elif ismaxmem:
-        globalmaxmemory = float(ismaxmem.groups()[0])
-    elif isreturn and enable_return:
-        return Aardvark.gettype(isreturn.groups()[0], line_num)
-    elif re.fullmatch("[\t ]*", line):
-        pass
-    else:
-        error("SyntaxError", line_num, line, "Invalid Syntax.")
+      i[1] += line + "\n"
+    return
+  for i in instuff:
+    i[1] += line + "\n"
+  if len(instuff) > 0:
+    return
 
 
+##########################################################
+  ismethod = Aardvark.gettokens(line, ["."])
+
+  isfunction = regex["isfunction"].fullmatch(line)
+  defvar = Aardvark.gettokens(line, ["="])
+  if len(defvar)>1:
+    return makevar(defvar)
+  if isfunction:
+    Aardvark.process_function(isfunction.groups()[0], line_num)
+    return
+  if len(ismethod)>1:
+
+    return Aardvark.process_method(ismethod[0], ismethod[1], line_num)
+
+  
+  for i in statements:
+    match = regex[i].fullmatch(line)
+    if match:
+      statements[i](match.groups()[0], line_num)
+      return
+  for key in keywords:
+    match = regex[key].fullmatch(line)
+    if match != None:
+
+      done = True
+      toreturnkey = keywords[key](match.groups()[0], line_num)
+      return toreturnkey
+
+  if re.fullmatch("[\t ]*", line):
+    return
+  else:
+    if done == False:
+      error("SyntaxError", line_num, line, "Invalid Syntax.")
 global line_num
 line_num = 0
 print(
-    "Aardvark Version 0.7.4 BETA\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n"
+    "Aardvark Version 0.8.0 BETA\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n"
 )
-while True:
+Aardvark.parse_line = parse_line
+if len(sys.argv) == 1:
+  while True:
     if memory_profiler.memory_usage()[0] > globalmaxmemory:
-        error("MemoryError", line_num, a,
-              "The program exceeded its maximum memory.")
+      error("MemoryError", line_num, a,
+            "The program exceeded its maximum memory.")
     line_num += 1
     a = remove_comments(input(">>> "))
     try:
-        parse_line(a, line_num)
-    #except Exception:
-    #    error("SyntaxError", line_num, a,
-    #          "Unknown SyntaxError, you may report this a bug.")
+      parse_line(a, line_num)
+    except Aardvark.AardvarkError as e:
+      e.printtext()
+      break
     except KeyboardInterrupt:
-        error("KeyboardInterrupt", line_num, a, "")
+      error("KeyboardInterrupt", line_num, a, "")
+    '''except Exception:
+      try:
+        error(
+          "SyntaxError", line_num, a,
+          "Unknown SyntaxError. This could be an error in your program or an error in the language."
+          )
+      except AardvarkError as a:
+        a.printtext()'''
+
+else:
+  line_num = 0
+  lines = open(sys.argv[-1]).read().split("\n")
+  for line in lines:
+    line_num += 1
+    try:
+      parse_line(line, line_num)
+    except AardvarkError as e:
+      e.printtext()
+      break
+    except Exception:
+      try:
+        error(
+          "SyntaxError", line_num, a,
+          "Unknown SyntaxError. This could be an error in your program or an error in the language."
+        )
+      except:
+        break
+
 
 #############################################
 #############################################

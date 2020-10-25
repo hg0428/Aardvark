@@ -1,3 +1,0 @@
-#include server
-render_file('index.html', '')
-run_server()

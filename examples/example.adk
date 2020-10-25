@@ -1,0 +1,32 @@
+class NewString { /This is a recreation of the string type (with no methods)\
+  ~reference() {
+    this.refcount++
+  }
+  ~init(string) {
+    string=string.fromtoindex(1, -1)
+    this.length = string.length
+    this.refcount = 0
+  }
+  ~identifier(item) {
+    if item.startswith("\"") and item.endwith("\""){
+      return True
+    }
+    if item.startswith("'") and item.endwith("'"){
+      return True
+    }
+    else {
+      return False
+    }
+  }
+}
+
+define do_this times:var "times" code:block { /This defines a new item, this one is a loop\
+  i=0
+  while i<times {
+    exec(code)
+    i=i+1
+  }
+}
+do_this 5 times {/ this is using the loop that was defined earlier \
+  output("it has looped")
+}

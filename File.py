@@ -29,3 +29,5 @@ def read_file(name, file):
         return file.read()
     except:
         error("FileOperationError", 0,f"{name}()", f"File with mode '{file.mode}' is not readable.")
+def getname(file):
+  return file.name

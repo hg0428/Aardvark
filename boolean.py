@@ -37,7 +37,10 @@ def Boolean(what, line_num):
         except:
             pass
         number += 1
-    #print("END",eval(newtext))
+    #print(newtext,eval(newtext))
     return True, eval(newtext)
 
 
+@Aardvark.method("bool", "not")
+def notmethod(name, boolean):
+  return not boolean

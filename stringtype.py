@@ -33,7 +33,7 @@ def string_replace(name, string, old, new):
     return string.replace(old, new)
 
 
-@Aardvark.method("string", "atindex")  #Here is a method for string types
+@Aardvark.method("string", "character")  #Here is a method for string types
 def string_atindex(name, string, index):
     return string[index]
 
