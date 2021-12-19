@@ -18,7 +18,7 @@ def dissable_function(name,
 def clear(name):
     os.system('clear')
     print(
-        "Aardvark Version 0.7.4\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n"
+        "Aardvark Version 0.8.7\nUse the help function for help.\n© Copyright 2021 PlasDev, hg0428, ZDev1\n"
     )
 
 
@@ -41,8 +41,10 @@ def file_size(name, file):  #get the size of a file
 
 @Aardvark.function("output")  #
 def output_function(name, toprint):  #Output function
-    global end
-    print(toprint, end=end)
+		if toprint ==True or toprint==False:
+			toprint=str(toprint).lower()
+		global end
+		print(toprint, end=end)
 
 
 @Aardvark.function("input")

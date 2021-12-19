@@ -40,7 +40,7 @@ def string_atindex(name, string, index):
 
 @Aardvark.method("string", "lower")
 def string_lowercase(name, string):
-  return string.lowe()
+  return string.lower()
 
 
 @Aardvark.method("string", "upper")

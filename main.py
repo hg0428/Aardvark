@@ -311,7 +311,7 @@ def parse_line(line, line_num):
 global line_num
 line_num = 0
 print(
-    "Aardvark Version 0.8.0 BETA\nUse the help function for help.\n© Copyright 2020 PlasDev, hg0428, ZDev1\n"
+    "Aardvark Version 0.8.7 BETA\nUse the help function for help.\n© Copyright 2021 PlasDev, hg0428, ZDev1\n"
 )
 Aardvark.parse_line = parse_line
 if len(sys.argv) == 1:
