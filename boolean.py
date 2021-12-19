@@ -11,7 +11,7 @@ def Boolean(what, line_num):
     #print(separated)
     isboolean = False
     for i in [
-            "==", ">", "<", "!=", "<=", ">=", " and ", " or ", "True", "False",
+            "==", ">", "<", "!=", "<=", ">=", " and ", " or ", "true", "false",
             " not "
     ]:
         if i in separated[0] or i in separated[1]:
@@ -23,7 +23,7 @@ def Boolean(what, line_num):
     #print("starting loop")
     for i in separated[0]:
         #print("NEW",newtext)
-        if i in ["True", "False", "none", " in "]:
+        if i in ["true", "false", "none", " in "]:
             newtext += i
         else:
             a = Aardvark.gettype(i, line_num, dontcheck=["bool", "none", ])
@@ -38,7 +38,7 @@ def Boolean(what, line_num):
             pass
         number += 1
     #print(newtext,eval(newtext))
-    return True, eval(newtext)
+    return True, eval(newtext.replace("true", "True").replace("false", 'False'))
 
 
 @Aardvark.method("bool", "not")
