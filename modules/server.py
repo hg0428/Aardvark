@@ -2,7 +2,7 @@ import flask
 import re
 from Aardvark import *
 #Aardvark.library
-app = flask.Flask(__name__)
+app = flask.Flask("app")
 regex["isreturnhtml"] = re.compile('[\t ]*return html (.+)')
 
 pages = {}

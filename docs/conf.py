@@ -18,11 +18,11 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Aardvark'
-copyright = '2020, Hudson Gouge, PlasDev, ZDev1'
-author = 'Hudson Gouge, PlasDev, ZDev1'
+copyright = '2021, hg0428, PlasDev, ZDev1'
+author = 'hg0428, PlasDev, ZDev1'
 
 # The full version, including alpha/beta/rc tags
-release = '2020'
+release = '0.8.7'
 
 
 # -- General configuration ---------------------------------------------------

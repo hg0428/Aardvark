@@ -4,7 +4,7 @@ Thank you for choosing Aardvark!
 
 Getting Started:
 ########
-To get started with your first output do: ``output('hello world!\n')``. There you go, you've officially ran your first program! Take note of the ``\n``. If you (like me) get tired quickly of writing ``\n`` you can go ahead and use ``#include anr`` press enter, and then run ``output('hello world!')``. See! works without the ``\n``. We'll talk more about ``#include`` later, but for now thats all you need to know. Comments start with ``/`` and end with ``\``. Clearing the terminal is done by using ``clear()``.
+To get started with your first output do: ``output('hello world!\n')``. There you go, you've officially ran your first program! Take note of the ``\n``. If you (like me) get tired quickly of writing ``\n`` you can go ahead and use ``#include anr`` press enter, and then run ``output('hello world!')``. See! works without the ``\n``. We'll talk more about ``#include`` later, but for now thats all you need to know. Comments start with ``//`` and end with ``\\``, but versions below ``0.8.7`` use ``/`` and ``\``. Clearing the terminal is done by using ``clear()``.
 
 A Note About Built In Functions:
 #########
@@ -24,7 +24,7 @@ Math works as usual (Multiplication: *, Division: /, Addition: +, Subtraction: -
 
 Booleans
 ########
-Booleans in Aardvark are ``True`` and ``False``, they can both be assigned to a variable.
+Booleans in Aardvark are ``True`` and ``False``, they can both be assigned to a variable. (``true`` and ``false`` for versions 0-0.4 and 0.8.7+)
 ::
     myBoolean = True
     if myBoolean == True {

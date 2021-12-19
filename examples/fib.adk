@@ -15,5 +15,4 @@ output(n)
         return a + x
 
 }
-a = Fib(input("enter num: "))
-output(a)
+Fib(input("enter num: "))
